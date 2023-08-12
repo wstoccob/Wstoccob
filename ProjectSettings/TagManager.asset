@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Cherry
   - Trap
+  - FallingPlatform
   layers:
   - Default
   - TransparentFX
