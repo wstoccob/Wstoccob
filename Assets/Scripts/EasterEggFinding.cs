@@ -18,7 +18,7 @@ public class EasterEggFinding : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && isFound == false)
+        if (  collision.CompareTag("Player") && isFound == false  )
         {
             spriteRenderer.enabled = true;
             isFound = true;

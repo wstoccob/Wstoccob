@@ -13,11 +13,13 @@ public class PlayerMovement : MonoBehaviour
     private float buttonTime = 0.3f;
     private float jumpTime;
     private bool jumping;
+    private float fGroundRemember = 0f;
 
     [SerializeField] private float moveSpeed = 9f;
     [SerializeField] private float jumpForce = 7f;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private AudioSource jumpSoundEffect;
+    [SerializeField] private float fGroundRememberTime = 0.25f;
 
     private enum MovementState { idle, running, jumping, falling }
 
@@ -31,10 +33,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        fGroundRemember -= Time.deltaTime;
+
         dirX = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
-
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        if ( IsGrounded() )
+        {
+            fGroundRemember = fGroundRememberTime;
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && (fGroundRemember > 0) )
         {
             jumpSoundEffect.Play();
             
@@ -42,13 +49,13 @@ public class PlayerMovement : MonoBehaviour
             jumpTime = 0;
         }
 
-        if (jumping)
+        if ( jumping ) 
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpTime += Time.deltaTime;
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) | jumpTime > buttonTime)
+        if (Input.GetKeyUp(KeyCode.Space) | jumpTime > buttonTime   ) 
         {
             jumping = false;
         }
