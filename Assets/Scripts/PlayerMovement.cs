@@ -19,7 +19,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 7f;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private AudioSource jumpSoundEffect;
-    [SerializeField] private float fGroundRememberTime = 0.25f;
+    [SerializeField] private float fGroundRememberTime = 0.15f;
+    [SerializeField] private float fHorizontalAcceleration = 1f;
+    [SerializeField] [Range(0, 1)] private float fHorizontalDampingBasic = 0.5f;
+    [SerializeField]
+    [Range(0, 1)] private float fHorizontalDampingWhenStopping = 0.5f;
+    [SerializeField]
+    [Range(0, 1)] private float fHorizontalDampingWhenTurning = 0.5f;
 
     private enum MovementState { idle, running, jumping, falling }
 
@@ -59,6 +65,10 @@ public class PlayerMovement : MonoBehaviour
         {
             jumping = false;
         }
+
+        //float fhorizontalvelocity = rb.velocity.x;
+        //fhorizontalvelocity += input.getaxisraw("horizontal");
+        //fhorizontalvelocity *= mathf.pow(1f - fhor)
 
         UpdateAnimationState();
     }

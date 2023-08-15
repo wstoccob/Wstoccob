@@ -80861,6 +80861,14 @@ PrefabInstance:
       propertyPath: jumpForce
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 6409708372392013702, guid: 862839fe55901c747ad1c3785c24c8de, type: 3}
+      propertyPath: fGroundRememberTime
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6409708372392013702, guid: 862839fe55901c747ad1c3785c24c8de, type: 3}
+      propertyPath: fHorizontalAcceleration
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 8017706508734042736, guid: 862839fe55901c747ad1c3785c24c8de, type: 3}
       propertyPath: m_Name
       value: Player
