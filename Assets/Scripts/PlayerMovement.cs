@@ -8,24 +8,22 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim;
     private BoxCollider2D coll;
     private SpriteRenderer sprite;
-    private float dirX = 0f;
+    private float fHorizontalVelocity = 0f;
 
     private float buttonTime = 0.3f;
     private float jumpTime;
     private bool jumping;
     private float fGroundRemember = 0f;
 
-    [SerializeField] private float moveSpeed = 9f;
+    [SerializeField] private float moveSpeed = 15f;
     [SerializeField] private float jumpForce = 7f;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private AudioSource jumpSoundEffect;
     [SerializeField] private float fGroundRememberTime = 0.15f;
-    [SerializeField] private float fHorizontalAcceleration = 1f;
+    //[SerializeField] private float fHorizontalAcceleration = 1f;
     [SerializeField] [Range(0, 1)] private float fHorizontalDampingBasic = 0.5f;
-    [SerializeField]
-    [Range(0, 1)] private float fHorizontalDampingWhenStopping = 0.5f;
-    [SerializeField]
-    [Range(0, 1)] private float fHorizontalDampingWhenTurning = 0.5f;
+    //[SerializeField] [Range(0, 1)] private float fHorizontalDampingWhenStopping = 0.5f;
+    //[SerializeField] [Range(0, 1)] private float fHorizontalDampingWhenTurning = 0.5f;
 
     private enum MovementState { idle, running, jumping, falling }
 
@@ -41,8 +39,13 @@ public class PlayerMovement : MonoBehaviour
     {
         fGroundRemember -= Time.deltaTime;
 
-        dirX = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
+        float fHorizontalVelocity = rb.velocity.x;
+        fHorizontalVelocity *= Input.GetAxisRaw("Horizontal");
+        fHorizontalVelocity *= Mathf.Pow(1f - fHorizontalDampingBasic, Time.deltaTime * moveSpeed);
+        rb.velocity = new Vector2(fHorizontalVelocity, rb.velocity.y);
+
+        //dirX = Input.GetAxisRaw("Horizontal");
+        //rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
         if ( IsGrounded() )
         {
             fGroundRemember = fGroundRememberTime;
@@ -66,21 +69,19 @@ public class PlayerMovement : MonoBehaviour
             jumping = false;
         }
 
-        //float fhorizontalvelocity = rb.velocity.x;
-        //fhorizontalvelocity += input.getaxisraw("horizontal");
-        //fhorizontalvelocity *= mathf.pow(1f - fhor)
+        
 
         UpdateAnimationState();
     }
     private void UpdateAnimationState()
     {
         MovementState state;
-        if (dirX > 0f)
+        if (fHorizontalVelocity > 0f)
         {
             state = MovementState.running;
             sprite.flipX = false;
         }
-        else if (dirX < 0)
+        else if (fHorizontalVelocity < 0f)
         {
             state = MovementState.running;
             sprite.flipX = true;
