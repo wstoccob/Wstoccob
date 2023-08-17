@@ -8,22 +8,18 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim;
     private BoxCollider2D coll;
     private SpriteRenderer sprite;
-    private float fHorizontalVelocity = 0f;
 
     private float buttonTime = 0.3f;
     private float jumpTime;
     private bool jumping;
     private float fGroundRemember = 0f;
+    private float dirX = 0f;
 
     [SerializeField] private float moveSpeed = 15f;
     [SerializeField] private float jumpForce = 7f;
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private AudioSource jumpSoundEffect;
     [SerializeField] private float fGroundRememberTime = 0.15f;
-    //[SerializeField] private float fHorizontalAcceleration = 1f;
-    [SerializeField] [Range(0, 1)] private float fHorizontalDampingBasic = 0.5f;
-    //[SerializeField] [Range(0, 1)] private float fHorizontalDampingWhenStopping = 0.5f;
-    //[SerializeField] [Range(0, 1)] private float fHorizontalDampingWhenTurning = 0.5f;
 
     private enum MovementState { idle, running, jumping, falling }
 
@@ -39,10 +35,8 @@ public class PlayerMovement : MonoBehaviour
     {
         fGroundRemember -= Time.deltaTime;
 
-        float fHorizontalVelocity = rb.velocity.x;
-        fHorizontalVelocity *= Input.GetAxisRaw("Horizontal");
-        fHorizontalVelocity *= Mathf.Pow(1f - fHorizontalDampingBasic, Time.deltaTime * moveSpeed);
-        rb.velocity = new Vector2(fHorizontalVelocity, rb.velocity.y);
+        dirX = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
 
         //dirX = Input.GetAxisRaw("Horizontal");
         //rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
@@ -76,12 +70,12 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateAnimationState()
     {
         MovementState state;
-        if (fHorizontalVelocity > 0f)
+        if (dirX > 0f)
         {
             state = MovementState.running;
             sprite.flipX = false;
         }
-        else if (fHorizontalVelocity < 0f)
+        else if (dirX < 0f)
         {
             state = MovementState.running;
             sprite.flipX = true;
